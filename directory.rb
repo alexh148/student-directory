@@ -47,18 +47,18 @@ def print_header
 end
 
 def print(students)
-  accum = 0
-  while accum < students.length do
-    if students[accum][:name].length < 12
-      puts "#{accum+1}. #{students[accum][:name]} (#{students[accum][:cohort]} cohort) - Hobby: #{students[accum][:hobby]}".center(150)
-    end
-      accum += 1
-  end
-  # students.each_with_index do |student, index|
-  #   if student[:name].length < 12
-  #     puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  # accum = 0
+  # while accum < students.length do
+  #   if students[accum][:name].length < 12
+  #     puts "#{accum+1}. #{students[accum][:name]} (#{students[accum][:cohort]} cohort) - Hobby: #{students[accum][:hobby]}".center(150)
   #   end
+  #     accum += 1
   # end
+  students.each_with_index do |student, index|
+    if student[:name].length < 12
+      puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort) - Hobby: #{student[:hobby]}"
+    end
+  end
 end
 
 def print_footer(students)
