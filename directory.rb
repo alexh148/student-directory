@@ -26,8 +26,10 @@ end
 def print(students)
   accum = 0
   while accum < students.length do
-    puts "#{accum+1}. #{students[accum][:name]} (#{students[accum][:cohort]} cohort)"
-    accum += 1
+    if students[accum][:name].length < 12
+      puts "#{accum+1}. #{students[accum][:name]} (#{students[accum][:cohort]} cohort)"
+    end
+      accum += 1
   end
   # students.each_with_index do |student, index|
   #   if student[:name].length < 12
