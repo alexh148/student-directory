@@ -1,33 +1,22 @@
 # All students in a student array
 
-def month(i)
-  months = [
-    :January,
-    :February,
-    :March,
-    :April,
-    :May,
-    :June,
-    :July,
-    :August,
-    :September,
-    :October,
-    :November,
-    :December
-  ]
-  return months[i-1]
-end
-
 def input_students
   puts "Please enter the names of the students\nTo finish, just hit return twice"
   students = []
-  name = gets.chomp.capitalize
+  months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
+  name = gets.chomp.split.map(&:capitalize).join(' ')
   while !name.empty? do
-    puts "Which cohort are they part of? Enter the number of the month"
-    value = gets.chomp
-    cohort = month(value.to_i)
-    if value.empty?
+    puts "Which cohort are they part of?"
+    cohort = gets.chomp.capitalize.to_sym
+    if cohort.empty?
       cohort = :November
+    end
+    while !months.include?(cohort) do
+      puts "Not a valid response. Try again (Hit enter to use the default value)"
+      cohort = gets.chomp.capitalize.to_sym
+      if cohort.empty?
+        cohort = :November
+      end
     end
     puts "What is their main hobby?"
     hobby = gets.chomp
@@ -36,7 +25,7 @@ def input_students
     end
     students << {name: name, cohort: cohort, hobby: hobby}
     puts "Now we have #{students.count} students.\nPlease provide another name, or hit return to finish"
-    name = gets.chomp.capitalize
+    name = gets.chomp.split.map(&:capitalize).join(' ')
   end
   students
 end
@@ -55,9 +44,7 @@ def print(students)
   #     accum += 1
   # end
   students.each_with_index do |student, index|
-    if student[:name].length < 12
-      puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort) - Hobby: #{student[:hobby]}"
-    end
+    puts "#{index+1}. #{student[:name]} (#{student[:cohort]} cohort) - Hobby: #{student[:hobby]}".center(150)
   end
 end
 
