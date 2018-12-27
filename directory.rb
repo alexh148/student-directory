@@ -45,47 +45,50 @@ end
 def input_students
   puts "Please enter the names of the students\nTo finish, just hit return twice"
   months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
-  name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
-  while !name.empty? do
+  @name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
+  while !@name.empty? do
     puts "Which cohort are they part of?"
-    cohort = STDIN.gets.chomp.capitalize.to_sym
-    if cohort.empty?
-      cohort = :November
+    @cohort = STDIN.gets.chomp.capitalize
+    if @cohort.empty?
+      @cohort = "November"
     end
-    while !months.include?(cohort) do
+    while !months.include?(@cohort.to_sym) do
       puts "Not a valid response. Try again (Hit enter to use the default value)"
-      cohort = STDIN.gets.chomp.capitalize.to_sym
-      if cohort.empty?
-        cohort = :November
+      @cohort = STDIN.gets.chomp.capitalize
+      if @cohort.empty?
+        @cohort = "November"
       end
     end
     puts "What is their main hobby?"
-    hobby = STDIN.gets.chomp
-    if hobby.empty?
-      hobby = "Having fun"
+    @hobby = STDIN.gets.chomp
+    if @hobby.empty?
+      @hobby = "Having fun"
     end
-    @students << {name: name, cohort: cohort, hobby: hobby}
+    push_students
     puts "Now we have #{@students.count} students."
     puts "Please provide another name, or hit return to finish"
-    name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
+    @name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
   end
 end
 
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
-  name, cohort, hobby = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym, hobby: hobby}
+    @name, @cohort, @hobby = line.chomp.split(',')
+    push_students
   end
   file.close
 end
 
 def try_load_students
   filename = ARGV.first
-  return if filename.nil?
-  if File.exists?(filename)
+  if filename.nil?
+    puts "No file provided. Loading students.csv by default"
+    load_students("students.csv")
+    puts "Loaded #{@students.count} from students.csv"
+  elsif File.exists?(filename)
     load_students(filename)
-     puts "Loaded #{@students.count} from #{filename}"
+    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
@@ -115,6 +118,10 @@ end
 
 def print_footer
   puts "Overall, we have #{@students.count} great students".center(150)
+end
+
+def push_students
+  @students << {name: @name, cohort: @cohort.to_sym, hobby: @hobby}
 end
 
 try_load_students
