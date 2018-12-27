@@ -1,7 +1,6 @@
 @students = []
 
 def interactive_menu
-  try_load_students
   loop do
     print_menu
     process(STDIN.gets.chomp)
@@ -118,6 +117,7 @@ def print_footer
   puts "Overall, we have #{@students.count} great students".center(150)
 end
 
+try_load_students
 interactive_menu
 
 =begin # Unused code from example exercises
