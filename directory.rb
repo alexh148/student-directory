@@ -28,14 +28,21 @@ end
 def process(selection)
   case selection
     when "1"
+      puts "Loaded the 'Input students' function"
       input_students
     when "2"
+      puts "Loaded the 'Show students' function"
       show_students
     when "3"
+      puts "Loaded the 'Save students' function"
       save_students
     when "4"
-      load_students
+      puts "Loaded the 'Load students' function"
+      puts "Which file would you like to load?"
+      load_from = STDIN.gets.chomp
+      load_students(load_from)
     when "9"
+      puts "Exiting the program..."
       exit
     else
       puts "I don't know what you meant. Try again"
@@ -96,7 +103,9 @@ def try_load_students
 end
 
 def save_students
-  file = File.open("students.csv", "w")
+  puts "Where would you like to save the students list to?"
+  save_to = STDIN.gets.chomp
+  file = File.open(save_to, "w")
   @students.each do |student|
     csv_line = [student[:name], student[:cohort], student[:hobby]].join(",")
     file.puts csv_line
