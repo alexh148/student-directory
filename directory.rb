@@ -1,9 +1,10 @@
 @students = []
 
 def interactive_menu
+  try_load_students
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -45,39 +46,51 @@ end
 def input_students
   puts "Please enter the names of the students\nTo finish, just hit return twice"
   months = [:January, :February, :March, :April, :May, :June, :July, :August, :September, :October, :November, :December]
-  name = gets.chomp.split.map(&:capitalize).join(' ')
+  name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
   while !name.empty? do
     puts "Which cohort are they part of?"
-    cohort = gets.chomp.capitalize.to_sym
+    cohort = STDIN.gets.chomp.capitalize.to_sym
     if cohort.empty?
       cohort = :November
     end
     while !months.include?(cohort) do
       puts "Not a valid response. Try again (Hit enter to use the default value)"
-      cohort = gets.chomp.capitalize.to_sym
+      cohort = STDIN.gets.chomp.capitalize.to_sym
       if cohort.empty?
         cohort = :November
       end
     end
     puts "What is their main hobby?"
-    hobby = gets.chomp
+    hobby = STDIN.gets.chomp
     if hobby.empty?
       hobby = "Having fun"
     end
     @students << {name: name, cohort: cohort, hobby: hobby}
     puts "Now we have #{@students.count} students."
     puts "Please provide another name, or hit return to finish"
-    name = gets.chomp.split.map(&:capitalize).join(' ')
+    name = STDIN.gets.chomp.split.map(&:capitalize).join(' ')
   end
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort, hobby = line.chomp.split(',')
     @students << {name: name, cohort: cohort.to_sym, hobby: hobby}
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
 end
 
 def save_students
